@@ -1,3 +1,14 @@
+初衷：使用codex/claude codex时，多任务并行干活的时候，总是要打开很多窗口。来回切换窗口非常麻烦，所以做了这个将terminal统一放到一个网页的项目。
+
+小白随便vibe coding的项目。
+欢迎大家狠狠提建议！有空就改。
+欢迎下载改造，牛马们也要有适合自己的vibe coding 界面。
+
+
+
+------------------ 分割线 ------------------
+
+
 # WebSurface · 本地 Web 版会话管理器
 
 在浏览器里按「项目 → 任务」两级分类管理多个 PowerShell / claude / codex 终端会话。
@@ -154,3 +165,7 @@ Task    { id, name, cwd, kind: "claude" | "codex" | "powershell" }
 - **`EBUSY: resource busy or locked`**：安装时 node_modules 被占用。先停掉正在运行的服务器
   （对应 PowerShell 窗口按 Ctrl+C，或 `Stop-Process -Name node`）再重装。
 - **手机打不开局域网地址**：确认同一 WiFi；确认 Windows 防火墙已放行 Node.js（专用网络）。
+
+## 许可证
+
+本项目采用 [MIT License](LICENSE)。
