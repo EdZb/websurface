@@ -1,0 +1,13 @@
+功能：
+1. 我想要一个网页之类的 可以分类展示powershell窗口，这样我就能快速找到我需要的窗口。分类我想按照Project分类
+2. 目前不考虑联网，只需要本地使用即可
+
+
+设计：
+1. 我想的是在网页中创建项目名称/选择已有项目 -- 创建task/选择已有task -- 设置目录 -- 打开claude/codex
+2. 输入内容时：ctrl+g打开文本文档 输入内容保存关闭
+3. 实时接收powershell的内容【powershell先同步打开方便查看效果】
+4. 网页可以关闭这个powershell进程
+
+要求
+1. firefox/网页兼容。 为了保证多种系统可以兼容。windows linux 安卓 macOS ipad系统等等。

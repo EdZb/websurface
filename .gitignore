@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# Local runtime data
+data/projects.json
+data/projects.json.tmp
+
+# Machine-specific assistant settings
+.claude/settings.local.json
+
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Logs and generated output
+*.log
+dist/
+build/
+.cache/
+coverage/
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

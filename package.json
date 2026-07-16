@@ -1,0 +1,19 @@
+{
+  "name": "websurface",
+  "version": "0.1.0",
+  "description": "本地 Web 版 PowerShell 会话管理器（按项目/任务分类管理 claude/codex 终端）",
+  "type": "commonjs",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "test": "node test/large-input.integration.js"
+  },
+  "dependencies": {
+    "@homebridge/node-pty-prebuilt-multiarch": "0.13.1",
+    "express": "^4.19.2",
+    "ws": "^8.18.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
