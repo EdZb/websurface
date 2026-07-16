@@ -4,6 +4,9 @@
   "description": "本地 Web 版 PowerShell 会话管理器（按项目/任务分类管理 claude/codex 终端）",
   "type": "commonjs",
   "main": "server/index.js",
+  "bin": {
+    "websurface": "bin/websurface.js"
+  },
   "scripts": {
     "start": "node server/index.js",
     "test": "node test/large-input.integration.js"
@@ -14,6 +17,6 @@
     "ws": "^8.18.0"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=24 <25"
   }
 }

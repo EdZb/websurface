@@ -20,30 +20,51 @@
 ## 环境要求
 
 - Windows 11
-- Node.js 18 及以上（本项目在 Node 24 上开发）
+- Node.js 24（当前开发和验证版本：`24.15.0`）
+- Git
 
 ## 安装
 
-```bash
-npm install
+在 PowerShell 中执行：
+
+```powershell
+git clone https://github.com/EdZb/websurface.git
+Set-Location .\websurface
+npm ci
 ```
 
 > node-pty（终端进程库）使用预编译版本 `@homebridge/node-pty-prebuilt-multiarch`，
 > 版本**锁定在 `0.13.1`**（这是目前唯一提供 Node 24 / ABI v137 Windows 预编译二进制的版本，
 > 见「已知问题」）。国内网络建议用镜像安装，通常无需 Visual Studio 编译工具链：
 >
-> ```bash
-> set prebuild_install_mirror=https://registry.npmmirror.com/-/binary/node-pty-prebuilt-multiarch/
-> npm install --registry=https://registry.npmmirror.com
+> ```powershell
+> $env:npm_config_homebridge_node_pty_prebuilt_multiarch_binary_host_mirror = 'https://registry.npmmirror.com/-/binary/node-pty-prebuilt-multiarch/'
+> npm ci --registry=https://registry.npmmirror.com
 > ```
 >
 > 若仍报错，见文末「故障排查」。
 
 ## 启动
 
-```bash
+```powershell
 npm start
 ```
+
+### 在任意 PowerShell 路径启动
+
+安装完成后，在 WebSurface 项目目录中执行一次：
+
+```powershell
+npm link
+```
+
+此后无论 PowerShell 当前位于哪个目录，都可以直接启动：
+
+```powershell
+websurface
+```
+
+`websurface` 命令始终启动已链接的 WebSurface 项目；PowerShell 当前目录不会改变任务中保存的工作目录。停止服务时按 `Ctrl+C`。如果不再需要全局命令，可执行 `npm unlink --global websurface`。
 
 启动后控制台会打印访问地址，例如：
 
@@ -54,6 +75,8 @@ npm start
 
 - 本机浏览器：打开 `http://localhost:3000`
 - 手机 / 平板 / 其他电脑：连接**同一局域网（WiFi）**后，浏览器打开上面的「局域网访问」地址
+- `localhost` 始终指向当前运行 WebSurface 的电脑；默认端口不变时，本机地址固定为 `http://localhost:3000`。
+- 局域网 IP 由电脑所在网络分配，换电脑、换网络或重新连接后都可能变化。每次以启动日志实际打印的地址为准；如果打印多个地址，应选择与访问设备处于同一网段的地址。
 
 修改端口：`PORT=8080 npm start`（Windows PowerShell 用 `$env:PORT=8080; npm start`）。
 
