@@ -172,6 +172,114 @@ Task    { id, name, cwd, kind: "claude" | "codex" | "powershell" }
 `data/projects.json` 是**唯一的真实数据**（你的所有项目与任务定义），不进版本库。
 建议定期手动复制一份，误删或改坏后可直接还原。
 
+## 本地 Git 备份与恢复
+
+本项目同时使用两个 Git 远端：
+
+```text
+origin  -> https://github.com/EdZb/websurface.git
+backup  -> D:\Proj_backup\Proj02_websurface
+```
+
+`backup` 是本机上的 bare Git 仓库，用于在项目代码改坏、`.git` 损坏或工作目录丢失时恢复。它不会自动更新，只有已经提交并推送到 `backup` 的版本才能恢复。
+
+> [!IMPORTANT]
+> Git 备份不包含 `.gitignore` 排除的 `data/projects.json`、`node_modules/` 和本机配置。尤其是 `data/projects.json`，必须另外复制备份；从 Git 恢复代码后不会自动恢复你的项目和任务数据。
+
+### 创建一个可恢复版本
+
+修改完成并确认可用后，在 PowerShell 中执行：
+
+```powershell
+Set-Location D:\Proj02_WebSurface
+git status
+git add .
+git diff --cached --stat
+git commit -m "说明本次修改"
+git push backup main
+git push origin main
+```
+
+其中 `git push backup main` 更新本地备份，`git push origin main` 更新 GitHub。即使 GitHub 暂时无法连接，也可以先成功保存到本地 `backup`。
+
+检查两个远端及最近的备份版本：
+
+```powershell
+git remote -v
+git log -1 --oneline
+git -C D:\Proj_backup\Proj02_websurface log -1 --oneline
+```
+
+### 撤销尚未提交的文件修改
+
+先查看差异：
+
+```powershell
+git diff
+```
+
+确认要放弃某个文件的未提交修改后执行：
+
+```powershell
+git restore "文件相对路径"
+```
+
+该命令会丢弃该文件尚未提交的修改，执行前应确认其中没有需要保留的内容。
+
+### 撤销已经提交的错误修改
+
+先查看提交历史：
+
+```powershell
+git log --oneline
+```
+
+若只需撤销最近一次提交，推荐创建一个反向提交，而不是改写历史：
+
+```powershell
+git revert HEAD
+git push backup main
+git push origin main
+```
+
+撤销更早的某次提交时，将 `HEAD` 换成对应提交哈希。公共仓库中不建议使用 `git reset --hard` 后强制推送。
+
+### 从本地备份恢复单个文件
+
+当前仓库的 `.git` 仍可用时，可以直接从本地备份取回文件：
+
+```powershell
+Set-Location D:\Proj02_WebSurface
+git fetch backup
+git restore --source backup/main -- "文件相对路径"
+git diff
+```
+
+检查恢复结果后，再正常提交并推送到两个远端。
+
+### 从本地备份恢复整个项目
+
+不要直接克隆到仍然存在且非空的原目录。先恢复到一个新目录：
+
+```powershell
+git clone D:\Proj_backup\Proj02_websurface D:\Recovered_WebSurface
+Set-Location D:\Recovered_WebSurface
+npm ci
+npm test
+```
+
+确认恢复后的项目正常，再决定是否替换原工作目录。需要任意路径启动命令时，在恢复目录重新执行：
+
+```powershell
+npm link
+```
+
+最后从单独的数据备份中还原 `data/projects.json`。验证本地 bare 仓库完整性可执行：
+
+```powershell
+git -C D:\Proj_backup\Proj02_websurface fsck --full
+```
+
 ## 已知问题
 
 - **node-pty 版本必须锁 `0.13.1`**：`0.12.0` 和 `0.14.0` 都没有 Node 24（ABI v137）的
